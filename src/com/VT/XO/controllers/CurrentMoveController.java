@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class CurrentMoveController {
 
-    private Figure currentMove(final Field field){
+    public Figure currentMove(final Field field){
         int countFigure = 0;
 
         for (int i = 0; i < field.getSize(); i++){
