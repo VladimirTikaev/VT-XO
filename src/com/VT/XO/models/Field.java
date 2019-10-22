@@ -39,6 +39,10 @@ public class Field {
         }
     }
 
+    public int getSize() {
+        return size;
+    }
+
     boolean checkPoint(final Point point){
         return checkCoordinate(point.x) && checkCoordinate(point.y);
     }
