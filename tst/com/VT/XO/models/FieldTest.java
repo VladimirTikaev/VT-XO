@@ -70,7 +70,7 @@ public class FieldTest {
     }
 
     @Test
-    public void setFigureWhenYAndYCoordinateLessMinValue() throws Exception {
+    public void setFigureWhenXAndYCoordinateLessMinValue() throws Exception {
         final int size = 3;
         final int minValue = 0;
         final Field field = new Field(size);
@@ -126,7 +126,7 @@ public class FieldTest {
     }
 
     @Test
-    public void getFigureWithNormalCordinate() throws Exception {
+    public void getFigureWithNormalCoordinate() throws Exception {
 
         final int size = 3;
         final Field field = new Field(size);
@@ -136,14 +136,140 @@ public class FieldTest {
 
     }
 
-
-
     @Test
-    public void checkPoint() throws Exception {
+    public void getFigureWhenXLessMinSize() throws Exception {
+
+        final int minSize = 0;
+        final int size = 3;
+        final Field field = new Field(size);
+        final Point point = new Point(minSize - 1,1);
+        try {
+            final Figure actualValue = field.getFigure(point);
+            fail();
+        }catch (InvalidMoveException e){}
     }
 
     @Test
-    public void checkCoordinate() throws Exception {
+    public void getFigureWhenYLessMinSize() throws Exception {
+
+        final int minSize = 0;
+        final int size = 3;
+        final Field field = new Field(size);
+        final Point point = new Point( 1,minSize - 1);
+        try {
+            final Figure actualValue = field.getFigure(point);
+            fail();
+        }catch (InvalidMoveException e){}
+    }
+
+    @Test
+    public void getFigureWhenXandYLessMinSize() throws Exception {
+
+        final int minSize = 0;
+        final int size = 3;
+        final Field field = new Field(size);
+        final Point point = new Point( minSize - 1,minSize - 1);
+        try {
+            final Figure actualValue = field.getFigure(point);
+            fail();
+        }catch (InvalidMoveException e){}
+    }
+
+    @Test
+    public void getFigureWhenXMoreMaxSize() throws Exception {
+
+        final int size = 3;
+        final Field field = new Field(size);
+        final int maxSize = size - 1;
+        final Point point = new Point(maxSize + 1,1);
+        try {
+            final Figure actualValue = field.getFigure(point);
+            fail();
+        }catch (InvalidMoveException e){}
+    }
+
+    @Test
+    public void getFigureWhenYMoreMaxSize() throws Exception {
+
+        final int size = 3;
+        final Field field = new Field(size);
+        final int maxSize = size - 1;
+        final Point point = new Point( 1,maxSize + 1);
+        try {
+            final Figure actualValue = field.getFigure(point);
+            fail();
+        }catch (InvalidMoveException e){}
+    }
+
+    @Test
+    public void getFigureWhenXandYMoreMaxSize() throws Exception {
+
+        final int size = 3;
+        final Field field = new Field(size);
+        final int maxSize = size - 1;
+        final Point point = new Point( maxSize + 1,maxSize + 1);
+        try {
+            final Figure actualValue = field.getFigure(point);
+            fail();
+        }catch (InvalidMoveException e){}
+    }
+
+
+    @Test
+    public void checkCoordinateWhenCoordinateValid() throws Exception {
+
+        final int size = 3;
+        final Field field = new Field(size);
+        final int testCoordinate = size - 1;
+        final boolean expectedValue = true;
+        final boolean actualValue = field.checkCoordinate(testCoordinate);
+        assertEquals(expectedValue, actualValue);
+    }
+
+    @Test
+    public void checkCoordinateWhenCoordinateLessMinCoordinate() throws Exception {
+
+        final int size = 3;
+        final int minValue = 0;
+        final Field field = new Field(size);
+        final int testCoordinate = minValue - 1;
+        final boolean expectedValue = false;
+        final boolean actualValue = field.checkCoordinate(testCoordinate);
+        assertEquals(expectedValue, actualValue);
+    }
+
+    @Test
+    public void checkCoordinateWhenCoordinateMoreMaxCoordinate() throws Exception {
+
+        final int size = 3;
+        final int maxValue = size - 1;
+        final Field field = new Field(size);
+        final int testCoordinate = maxValue + 1;
+        final boolean expectedValue = false;
+        final boolean actualValue = field.checkCoordinate(testCoordinate);
+        assertEquals(expectedValue, actualValue);
+    }
+
+    @Test
+    public void checkPointWhenPointValid() throws Exception {
+        final int size = 3;
+        final Field field = new Field(size);
+        final Point testPoint = new Point(1,1);
+        final boolean expectedValue = true;
+        final boolean actualValue = field.checkPoint(testPoint);
+        assertEquals(expectedValue, actualValue);
+
+    }
+
+    @Test
+    public void checkPointWhenPointNoValid() throws Exception {
+        final int size = 3;
+        final Field field = new Field(size);
+        final Point testPoint = new Point(-1,3);
+        final boolean expectedValue = false;
+        final boolean actualValue = field.checkPoint(testPoint);
+        assertEquals(expectedValue, actualValue);
+
     }
 
 }
