@@ -25,11 +25,13 @@ public class Player {
         return figure;
     }
 
-    public class PlayerBuilder{
+    public static class PlayerBuilder{
 
         private String name;
         private String surname;
         private Figure figure;
+
+
 
         public PlayerBuilder name(final String name){
             this.name = name;
