@@ -11,7 +11,10 @@ public class Field {
     private static final int MIN_SIZE = 3;
     private static final int MIN_COORDINATE = 0;
 
+
+
     private final int size;
+    private final int countForWin;
 
     private final Figure[][] field;
 
@@ -21,6 +24,7 @@ public class Field {
         }
         this.size = size;
         field = new Figure[size][size];
+        countForWin = MIN_SIZE +  (size / MIN_SIZE) - 1;
     }
 
     public void setFigure(final Figure figure, final Point point) throws InvalidMoveException{
@@ -37,6 +41,10 @@ public class Field {
         }else {
             throw new InvalidMoveException();
         }
+    }
+
+    public int getCountForWin() {
+        return countForWin;
     }
 
     public int getSize() {
