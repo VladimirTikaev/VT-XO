@@ -18,6 +18,7 @@ public class FieldTest {
         assertNotNull(field);
     }
 
+
     @Test
     public void createFieldWithSizeLessThenMinSize() throws Exception {
         final int minSize = 3;
@@ -272,4 +273,23 @@ public class FieldTest {
 
     }
 
+    @Test
+    public void getCountForWinWhenMinFieldSize()throws Exception  {
+
+        final int size = 3;
+        final Field field = new Field(size);
+        final int  expectedValue = 3;
+        final int actualValue = field.getCountForWin();
+        assertEquals(expectedValue, actualValue);
+    }
+
+    @Test
+    public void getCountForWinWhenFieldSizeMoreMin()throws Exception  {
+
+        final int size = 15;
+        final Field field = new Field(size);
+        final int  expectedValue = 7;
+        final int actualValue = field.getCountForWin();
+        assertEquals(expectedValue, actualValue);
+    }
 }
