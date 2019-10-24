@@ -12,77 +12,161 @@ public class WinnerController {
     public Figure getWinner(final Field field){
 
         for(int i = 0; i < field.getSize(); i++){
-            if (checkRowColumn(field, i)){
+            if (checkRowColumn(field, i) != null){
+                return checkRowColumn(field,i);
+            }
+        }
+
+        return checkDiagonals(field);
+
+    }
+
+    Figure checkRowColumn(final Field field, final int rowCol){
+
+        for(int z = 0; z <= field.getSize() - field.getCountForWin(); z++){
+
+                if(checkPointOnRowCol(field, rowCol, z)){
+                    try {
+                        return field.getFigure(new Point(rowCol, z));
+                    } catch (InvalidMoveException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            if(checkPointOnRowCol(field, z, rowCol)){
                 try {
-                    return field.getFigure(new Point(i,0));
+                    return field.getFigure(new Point(z, rowCol));
                 } catch (InvalidMoveException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        return checkDigonals(field);
-
+        return null;
     }
 
-    boolean checkRowColumn(final Field field, final int rowCol){
+    Figure checkDiagonals(final Field field){
 
-        int countEqualInRow = 0;
-        int countEqualInColumn = 0;
+        final int halfDiog = field.getSize() - field.getCountForWin() + 1;
 
-        for(int j = 0; j < field.getSize(); j++ ){
-            try {
-                if(field.getFigure(new Point(rowCol, 0)) == field.getFigure(new Point(rowCol,j))){
-                    countEqualInRow ++;
+        for(int i = 0; i < halfDiog; i++ ){
+            for(int j = 0; j <= field.getSize() -  field.getCountForWin(); j++){
+
+                try {
+
+                    if(checkPointOnMainDiag(field, j, j+i)){
+                            return field.getFigure(new Point(j, j+i));
+                    }
+
+                    if(checkPointOnMainDiag(field, j+i, j)){
+                            return field.getFigure(new Point(j+i, j));
+                    }
+
+                    if(checkPointOnSideDiag(field, j , (field.getSize() - 1 ) - (j + i))){
+                             return field.getFigure(new Point(j, (field.getSize() - 1 ) - (j + i)));
+                    }
+
+                    if(checkPointOnSideDiag(field, j + i , (field.getSize() - 1 ) - j)){
+                        return field.getFigure(new Point(j + i, (field.getSize() - 1 ) - j));
+                    }
+
+                } catch (InvalidMoveException e) {
+                    e.printStackTrace();
                 }
-                if(field.getFigure(new Point(0, rowCol)) == field.getFigure(new Point(j,rowCol))){
-                    countEqualInColumn ++;
-                }
-            } catch (InvalidMoveException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(countEqualInRow == field.getSize() || countEqualInColumn == field.getSize() ) {
-            return true;
-        }
-        return false;
-    }
-
-    Figure checkDigonals(final Field field){
-
-        int countEqualMainDiog = 0;
-        int countEqualSideDiog = 0;
-        for(int i = 0; i < field.getSize(); i++){
-            try {
-                if(field.getFigure(new Point(0,0)) == field.getFigure(new Point(i,i))){
-                    countEqualMainDiog ++;
-                }
-
-                if(field.getFigure(new Point(0,field.getSize())) == field.getFigure(new Point(i,field.getSize() - i))){
-                    countEqualSideDiog ++;
-                }
-            } catch (InvalidMoveException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(countEqualMainDiog == field.getSize()){
-            try {
-                return field.getFigure(new Point(0,0));
-            } catch (InvalidMoveException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(countEqualSideDiog == field.getSize()){
-            try {
-                return field.getFigure(new Point(0,field.getSize()));
-            } catch (InvalidMoveException e) {
-                e.printStackTrace();
             }
         }
 
         return null;
     }
+
+
+
+    boolean checkPointOnRowCol(final  Field field, final int i, final int j ){
+
+        try {
+            if(field.getFigure( new Point(i , j)) == null){
+                return false;
+            }
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
+
+        int countEqual = 0;
+        for(int k = j; k < field.getCountForWin(); k++){
+            try {
+                if(field.getFigure(new Point(i, j )) == field.getFigure(new Point(i, k))){
+                    countEqual++;
+                }
+            } catch (InvalidMoveException e) {
+                e.printStackTrace();
+            }
+
+        }
+        if(countEqual == field.getCountForWin()){
+                return true;
+        }
+        return false;
+
+    }
+
+    boolean checkPointOnMainDiag(final Field field, final int x, final int y){
+
+        try {
+            if(field.getFigure( new Point(x , y)) == null){
+                return false;
+            }
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
+
+        int countEqual = 0;
+        int i = x;
+        int j = y;
+
+        for(int k = 0; k < field.getSize(); k++, i++, j++){
+            try {
+                if(field.getFigure(new Point(i, j )) == field.getFigure(new Point(i + 1, j + 1))){
+                    countEqual++;
+                }
+            } catch (InvalidMoveException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(countEqual == field.getCountForWin()){
+            return true;
+        }
+        return false;
+    }
+
+    boolean checkPointOnSideDiag(final Field field, final int x, final int y){
+
+        try {
+            if(field.getFigure( new Point(x , y)) == null){
+                return false;
+            }
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
+
+        int countEqual = 0;
+        int i = x;
+        int j = y;
+
+        for(int k = 0; k < field.getSize(); k++, i++, j--){
+            try {
+                if(field.getFigure(new Point(i, j )) == field.getFigure(new Point(i + 1, j - 1))){
+                    countEqual++;
+                }
+            } catch (InvalidMoveException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(countEqual == field.getCountForWin()){
+            return true;
+        }
+        return false;
+    }
+
 }
