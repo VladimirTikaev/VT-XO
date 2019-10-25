@@ -47,9 +47,9 @@ public class WinnerController {
 
     Figure checkDiagonals(final Field field){
 
-        final int halfDiog = field.getSize() - field.getCountForWin() + 1;
+        final int quarterDiagonals = field.getSize() - field.getCountForWin() + 1;
 
-        for(int i = 0; i < halfDiog; i++ ){
+        for(int i = 0; i < quarterDiagonals; i++ ){
             for(int j = 0; j <= field.getSize() -  field.getCountForWin(); j++){
 
                 try {
