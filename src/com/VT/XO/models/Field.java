@@ -11,16 +11,14 @@ public class Field {
     private static final int MIN_SIZE = 3;
     private static final int MIN_COORDINATE = 0;
 
-
-
     private final int size;
     private final int countForWin;
 
     private final Figure[][] field;
 
-    public Field(int size) throws InvalidFieldSizeException{
+    public Field(int size){
         if(size < MIN_SIZE){
-            throw new InvalidFieldSizeException();
+           size = MIN_SIZE;
         }
         this.size = size;
         field = new Figure[size][size];
