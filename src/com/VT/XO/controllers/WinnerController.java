@@ -11,46 +11,122 @@ public class WinnerController {
 
     public Figure getWinner(final Field field){
 
-        for(int i = 0; i < field.getSize(); i++){
-            if (checkRowColumn(field, i) != null){
-                return checkRowColumn(field,i);
-            }
+
+        if(checkRowsColumns(field) != null){
+            return  checkRowsColumns(field);
         }
 
         return checkDiagonals(field);
 
     }
 
-    Figure checkRowColumn(final Field field, final int rowCol){
+    Figure checkRowsColumns(final Field field){
 
-        for(int z = 0; z <= field.getSize() - field.getCountForWin(); z++){
+        for(int i = 0; i < field.getSize(); i++){
+            if(checkOneRowCol(field, i) != null){
+                return checkOneRowCol(field, i);
+            }
+        }
 
-                if(checkPointOnRowCol(field, rowCol, z)){
+
+        return null;
+    }
+
+    Figure checkOneRowCol(final Field field, final int i){
+
+        for(int z = 0; z < (field.getSize() - field.getCountForWin()) + 1; z++ ){
+
+
+                if(checkPointOnRow(field, i, z)){
                     try {
-                        return field.getFigure(new Point(rowCol, z));
+                        return field.getFigure(new Point(i, z));
                     } catch (InvalidMoveException e) {
                         e.printStackTrace();
                     }
                 }
 
-            if(checkPointOnRowCol(field, z, rowCol)){
-                try {
-                    return field.getFigure(new Point(z, rowCol));
-                } catch (InvalidMoveException e) {
-                    e.printStackTrace();
+                if(checkPointOnColumn(field, z, i)){
+                    try {
+                        return field.getFigure(new Point(z, i));
+                    } catch (InvalidMoveException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+
         }
 
         return null;
+
     }
+
+    private boolean checkPointOnRow(Field field, int x, int y) {
+
+        try {
+            if(field.getFigure( new Point(x , y)) == null){
+                return false;
+            }
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
+
+        int y1 = y;
+        int countEqual = 0;
+        for(int k = 0; k < field.getCountForWin(); k++, y1++){
+            try {
+                if(field.getFigure(new Point(x, y)) == field.getFigure(new Point(x, y1))){
+                    countEqual++;
+                }
+            } catch (InvalidMoveException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(countEqual == field.getCountForWin()){
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean checkPointOnColumn(Field field, int x, int y) {
+
+        try {
+            if(field.getFigure( new Point(x , y)) == null){
+                return false;
+            }
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
+
+        int x1 = x;
+        int countEqual = 0;
+        for(int k = 0; k < field.getCountForWin(); k++, x1++){
+            try {
+                if(field.getFigure(new Point(x, y)) == field.getFigure(new Point(x1, y))){
+                    countEqual++;
+                }
+            } catch (InvalidMoveException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(countEqual == field.getCountForWin()){
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
 
     Figure checkDiagonals(final Field field){
 
         final int quarterDiagonals = field.getSize() - field.getCountForWin() + 1;
 
         for(int i = 0; i < quarterDiagonals; i++ ){
-            for(int j = 0; j <= field.getSize() -  field.getCountForWin(); j++){
+            for(int j = 0; j <= field.getSize() -  field.getCountForWin() - i; j++){
 
                 try {
 
@@ -74,6 +150,8 @@ public class WinnerController {
                     e.printStackTrace();
                 }
             }
+
+
         }
 
         return null;
@@ -81,33 +159,6 @@ public class WinnerController {
 
 
 
-    boolean checkPointOnRowCol(final  Field field, final int i, final int j ){
-
-        try {
-            if(field.getFigure( new Point(i , j)) == null){
-                return false;
-            }
-        } catch (InvalidMoveException e) {
-            e.printStackTrace();
-        }
-
-        int countEqual = 0;
-        for(int k = j; k < field.getCountForWin(); k++){
-            try {
-                if(field.getFigure(new Point(i, j )) == field.getFigure(new Point(i, k))){
-                    countEqual++;
-                }
-            } catch (InvalidMoveException e) {
-                e.printStackTrace();
-            }
-
-        }
-        if(countEqual == field.getCountForWin()){
-                return true;
-        }
-        return false;
-
-    }
 
     boolean checkPointOnMainDiag(final Field field, final int x, final int y){
 
@@ -123,9 +174,9 @@ public class WinnerController {
         int i = x;
         int j = y;
 
-        for(int k = 0; k < field.getSize(); k++, i++, j++){
+        for(int k = 0; k < field.getCountForWin(); k++, i++, j++){
             try {
-                if(field.getFigure(new Point(i, j )) == field.getFigure(new Point(i + 1, j + 1))){
+                if(field.getFigure(new Point(x, y )) == field.getFigure(new Point(i, j ))){
                     countEqual++;
                 }
             } catch (InvalidMoveException e) {
@@ -153,9 +204,9 @@ public class WinnerController {
         int i = x;
         int j = y;
 
-        for(int k = 0; k < field.getSize(); k++, i++, j--){
+        for(int k = 0; k < field.getCountForWin(); k++, i++, j--){
             try {
-                if(field.getFigure(new Point(i, j )) == field.getFigure(new Point(i + 1, j - 1))){
+                if(field.getFigure(new Point(x, y )) == field.getFigure(new Point(i, j))){
                     countEqual++;
                 }
             } catch (InvalidMoveException e) {
