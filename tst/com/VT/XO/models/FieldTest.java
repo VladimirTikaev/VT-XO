@@ -22,11 +22,12 @@ public class FieldTest {
     @Test
     public void createFieldWithSizeLessThenMinSize() throws Exception {
         final int minSize = 3;
-        try {
-            final Field field = new Field(minSize - 1);
-            fail();
-        }catch (InvalidFieldSizeException e){}
 
+        final Field field = new Field(minSize - 1);
+        final int expectedValue = minSize;
+        final int actualValue = field.getSize();
+
+        assertEquals(expectedValue, actualValue);
     }
 
     @Test
