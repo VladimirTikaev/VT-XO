@@ -20,19 +20,17 @@ public class WinnerController {
 
     }
 
-    Figure checkRowsColumns(final Field field){
+    private Figure checkRowsColumns(final Field field){
 
         for(int i = 0; i < field.getSize(); i++){
             if(checkOneRowCol(field, i) != null){
                 return checkOneRowCol(field, i);
             }
         }
-
-
         return null;
     }
 
-    Figure checkOneRowCol(final Field field, final int i){
+    private Figure checkOneRowCol(final Field field, final int i){
 
         for(int z = 0; z < (field.getSize() - field.getCountForWin()) + 1; z++ ){
 
@@ -121,7 +119,7 @@ public class WinnerController {
 
 
 
-    Figure checkDiagonals(final Field field){
+    private Figure checkDiagonals(final Field field){
 
         final int quarterDiagonals = field.getSize() - field.getCountForWin() + 1;
 
@@ -159,8 +157,7 @@ public class WinnerController {
 
 
 
-
-    boolean checkPointOnMainDiag(final Field field, final int x, final int y){
+    private boolean checkPointOnMainDiag(final Field field, final int x, final int y){
 
         try {
             if(field.getFigure( new Point(x , y)) == null){
@@ -190,7 +187,7 @@ public class WinnerController {
         return false;
     }
 
-    boolean checkPointOnSideDiag(final Field field, final int x, final int y){
+    private boolean checkPointOnSideDiag(final Field field, final int x, final int y){
 
         try {
             if(field.getFigure( new Point(x , y)) == null){
