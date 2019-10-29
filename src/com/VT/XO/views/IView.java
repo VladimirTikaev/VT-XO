@@ -5,5 +5,5 @@ import com.VT.XO.models.Game;
 
 public interface IView {
 
-    void showField(final Game game);
+    void show(final Game game);
 }
