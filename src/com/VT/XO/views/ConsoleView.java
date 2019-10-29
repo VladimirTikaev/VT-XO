@@ -31,9 +31,6 @@ public class ConsoleView implements IView {
     private final String HYPHEN_VIEW = " -- ";
 
 
-    public void showGame(final Game game){
-        System.out.println(game.getName());
-    }
 
     @Override
     public void show(Game game) {
@@ -75,7 +72,7 @@ public class ConsoleView implements IView {
     }
 
 
-        public boolean makeMove(final Game game){
+    public boolean makeMove(final Game game){
 
         CurrentMoveController currentMoveController = new CurrentMoveController();
         final Field field = game.getField();
@@ -115,7 +112,7 @@ public class ConsoleView implements IView {
             return new Point(askCoordinate("X") - 1, askCoordinate("Y") - 1);
     }
 
-    private int askCoordinate(final String coordinate) {
+    int askCoordinate(final String coordinate) {
 
         System.out.println("Input " + coordinate +": ");
         Scanner sc = new Scanner(System.in);
