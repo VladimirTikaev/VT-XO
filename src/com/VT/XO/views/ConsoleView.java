@@ -39,7 +39,7 @@ public class ConsoleView implements IView {
         final Player player2 = game.getPlayers()[1];
 
         final Field field = game.getField();
-        final int separatorLength = (field.getSize()*4) - 2;
+        final int separatorLength = (field.getSize()*4) - 1;
         final char separator = '-';
 
         System.out.format("%" + INDENT_LENGTH + "s\n", "Game name:" + game.getName());
@@ -66,7 +66,7 @@ public class ConsoleView implements IView {
             if (y != 0) {
                 System.out.format("%" + INDENT_LENGTH + "s\n", generateSeparator(separatorLength, separator));
             }
-            System.out.format("%" + INDENT_LENGTH + "s\n", generateLine(field, y));
+            System.out.format("%" + INDENT_LENGTH  + "s\n", generateLine(field, y));
         }
 
     }
@@ -107,12 +107,12 @@ public class ConsoleView implements IView {
         return true;
     }
 
-    Point askPoint() {
+    private Point askPoint() {
 
             return new Point(askCoordinate("X") - 1, askCoordinate("Y") - 1);
     }
 
-    int askCoordinate(final String coordinate) {
+    private int askCoordinate(final String coordinate) {
 
         System.out.println("Input " + coordinate +": ");
         Scanner sc = new Scanner(System.in);
@@ -139,7 +139,7 @@ public class ConsoleView implements IView {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
-            String leftFigureWall = (y != 0 ? "|" : "");
+            String leftFigureWall = (y != 0 ? "|" : " ");
             String figureSymbol = String.format("%s", figure != null ? figure : " ");
             String figureCell = String.format("%s%2s ", leftFigureWall, figureSymbol);
             resultLine = resultLine.concat(figureCell);
