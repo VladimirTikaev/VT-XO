@@ -7,9 +7,11 @@ import com.VT.XO.controllers.WinnerController;
 import com.VT.XO.models.Field;
 import com.VT.XO.models.Figure;
 import com.VT.XO.models.Game;
+import com.VT.XO.models.Player;
 import com.VT.XO.models.exceptions.AlreadyOccupiedException;
 import com.VT.XO.models.exceptions.InvalidMoveException;
 
+import javax.xml.soap.SAAJResult;
 import java.awt.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -22,21 +24,53 @@ public class ConsoleView implements IView {
 
     private MoveController moveController = new MoveController();
 
+    private final int INDENT_LENGTH = 50;
+
+    private final int HALF_INDENT_LENGTH = INDENT_LENGTH / 2;
+
+    private final String HYPHEN_VIEW = " -- ";
+
+
     public void showGame(final Game game){
         System.out.println(game.getName());
     }
 
     @Override
-    public void showField(Game game) {
+    public void show(Game game) {
+
+        final Player player1 = game.getPlayers()[0];
+        final Player player2 = game.getPlayers()[1];
+
         final Field field = game.getField();
+        final int separatorLength = (field.getSize()*4) - 2;
+        final char separator = '-';
 
-        for(int i = 0; i < field.getSize(); i++){
-            showLine(field, i);
-            if(i != field.getSize() - 1){
-                showSeparator((field.getSize()*4) - 2, '-');
+        System.out.format("%" + INDENT_LENGTH + "s\n", "Game name:" + game.getName());
+
+        System.out.format("%"
+                        + (HALF_INDENT_LENGTH
+                        - separatorLength
+                        + player2.getName().length()
+                        + HYPHEN_VIEW.length()
+                        + player2.getFigure().toString().length())
+                        + "s %"
+                        + (HALF_INDENT_LENGTH
+                        + separatorLength
+                        + HALF_INDENT_LENGTH
+                        - player2.getName().length()
+                        - HYPHEN_VIEW.length()
+                        - player2.getFigure().toString().length())
+                        + "s",
+                player1.getName() + HYPHEN_VIEW + player1.getFigure(),
+                player2.getName() + HYPHEN_VIEW + player2.getFigure() + "\n");
+
+
+        for (int y = 0; y < field.getSize(); y++) {
+            if (y != 0) {
+                System.out.format("%" + INDENT_LENGTH + "s\n", generateSeparator(separatorLength, separator));
             }
+            System.out.format("%" + INDENT_LENGTH + "s\n", generateLine(field, y));
         }
-
 
     }
 
@@ -79,7 +113,6 @@ public class ConsoleView implements IView {
     Point askPoint() {
 
             return new Point(askCoordinate("X") - 1, askCoordinate("Y") - 1);
-       // return new Point(askCoordinate("X") , askCoordinate("Y") );
     }
 
     private int askCoordinate(final String coordinate) {
@@ -96,36 +129,35 @@ public class ConsoleView implements IView {
     }
 
 
-    void showLine(final Field field, final int x){
+    String generateLine(final Field field, final int x){
+
+        String resultLine = "";
 
         for(int y = 0; y < field.getSize(); y++){
-            if(y != 0 ){
-                System.out.print("|");
-            }
+
             Figure figure = null;
             try {
                 figure = field.getFigure(new Point(y, x));
-               // figure = field.getFigure(new Point(x, y));
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
-            if(figure != null){
-                System.out.print(" " + figure + " ");
-            }else{
-                System.out.print(" " + " " + " ");
-            }
+            String leftFigureWall = (y != 0 ? "|" : "");
+            String figureSymbol = String.format("%s", figure != null ? figure : " ");
+            String figureCell = String.format("%s%2s ", leftFigureWall, figureSymbol);
+            resultLine = resultLine.concat(figureCell);
         }
-        System.out.println();
 
-
+        return resultLine;
     }
 
-    void showSeparator(final int size, final char sep){
+    String generateSeparator(final int size, final char sep){
 
+        String resultString = "";
         for(int i = 0; i < size; i++) {
-            System.out.print(sep);
+            resultString += sep;
         }
-        System.out.println();
+
+        return resultString;
     }
 }
